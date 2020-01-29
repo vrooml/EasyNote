@@ -4,4 +4,5 @@
           android:state_pressed="true"/>
     <item android:drawable="@drawable/button_nopress" android:state_enabled="true"
           android:state_pressed="false"/>
+    <item android:drawable="@drawable/button_false" android:state_enabled="false"/>
 </selector>

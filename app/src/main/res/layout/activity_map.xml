@@ -56,11 +56,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-            <com.fwwb.easynote.Utils.SongTextView
+            <EditText
                     android:text="尚未定位......"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:id="@+id/textview_location"
+                    android:id="@+id/edittext_location"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     android:layout_marginStart="16dp"
@@ -73,7 +73,7 @@
                     android:background="@drawable/textview_background"/>
 
             <Button
-                    android:text="确  定"
+                    android:text="确       定"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:id="@+id/button_ok_location"

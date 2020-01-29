@@ -3,18 +3,14 @@ package com.fwwb.easynote.Activitys;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.LocationManager;
-import android.os.Build;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.EditText;
 import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,14 +22,13 @@ import com.baidu.mapapi.map.*;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.search.core.SearchResult;
 import com.baidu.mapapi.search.geocode.*;
-import com.baidu.mapapi.search.poi.PoiSearch;
 import com.fwwb.easynote.R;
 
 public class MapActivity extends AppCompatActivity{
     @BindView(R.id.view_map)
     MapView mapView;
-    @BindView(R.id.textview_location)
-    TextView locationTextView;
+    @BindView(R.id.edittext_location)
+    EditText locationEditText;
     @BindView(R.id.button_ok_location)
     Button okLocationButtton;
     BaiduMap map;
@@ -86,7 +81,7 @@ public class MapActivity extends AppCompatActivity{
             public void onClick(View v){
                 Intent intent = new Intent();
                 //把返回数据存入Intent
-                intent.putExtra("address",address);
+                intent.putExtra("address",locationEditText.getText());
                 //设置返回数据
                 setResult(RESULT_OK, intent);
                 //关闭Activity
@@ -127,11 +122,11 @@ public class MapActivity extends AppCompatActivity{
             public void onGetReverseGeoCodeResult(ReverseGeoCodeResult reverseGeoCodeResult){
                 if(reverseGeoCodeResult==null||reverseGeoCodeResult.error!=SearchResult.ERRORNO.NO_ERROR){
                     //没有找到检索结果
-                    locationTextView.setText("暂无定位");
+                    locationEditText.setText("暂无定位");
                 }else{
                     //详细地址
                     address=reverseGeoCodeResult.getAddress();
-                    locationTextView.setText(address);
+                    locationEditText.setText(address);
                     //行政区号
                     int adCode=reverseGeoCodeResult.getCityCode();
                 }
@@ -139,7 +134,7 @@ public class MapActivity extends AppCompatActivity{
         };
         coder.setOnGetGeoCodeResultListener(listener);
 
-
+        //地图状态监听
         BaiduMap.OnMapStatusChangeListener mapStatusChangeListener=new BaiduMap.OnMapStatusChangeListener(){
             /**
              * 手势操作地图，设置地图状态等操作导致地图状态开始改变。

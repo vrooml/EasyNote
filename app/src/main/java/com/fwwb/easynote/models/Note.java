@@ -1,18 +1,33 @@
 package com.fwwb.easynote.models;
 
-public class Note{
+import java.io.Serializable;
+import java.util.Calendar;
+
+public class Note implements Serializable{
+    private int id;
     private String title;
     private String note;
-    private String date;
-    private String time;
+    private Calendar calendar;
     private String location;
 
-    public Note(String title,String note,String date,String time,String location){
+
+    public Note(){
+    }
+
+    public Note(int id,String title,String note,Calendar calendar,String location){
+        this.id=id;
         this.title=title;
         this.note=note;
-        this.date=date;
-        this.time=time;
+        this.calendar=calendar;
         this.location=location;
+    }
+
+    public int getId(){
+        return id;
+    }
+
+    public void setId(int id){
+        this.id=id;
     }
 
     public String getNote(){
@@ -23,20 +38,12 @@ public class Note{
         this.note=note;
     }
 
-    public String getDate(){
-        return date;
+    public Calendar getCalendar(){
+        return calendar;
     }
 
-    public void setDate(String date){
-        this.date=date;
-    }
-
-    public String getTime(){
-        return time;
-    }
-
-    public void setTime(String time){
-        this.time=time;
+    public void setCalendar(Calendar calendar){
+        this.calendar=calendar;
     }
 
     public String getTitle(){

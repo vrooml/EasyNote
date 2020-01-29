@@ -10,10 +10,14 @@ import android.widget.TextView;
 import com.fwwb.easynote.R;
 import com.fwwb.easynote.models.Note;
 
+import java.util.Calendar;
 import java.util.List;
 
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder>{
     private List<Note> noteList;
+    Calendar nowCalendar=Calendar.getInstance();
+    String time;
+    String date;
 
     static class ViewHolder extends RecyclerView.ViewHolder{
         TextView title;
@@ -56,8 +60,25 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder>{
             viewHolder.title.setText(note.getTitle());
         }
         viewHolder.note.setText(note.getNote());
-        viewHolder.time.setText(note.getTime());
-        viewHolder.date.setText(note.getDate());
+        time=String.valueOf(note.getCalendar().get(Calendar.HOUR_OF_DAY))+":"+String.valueOf(note.getCalendar().get(Calendar.MINUTE));
+        //按照距今时间设置对应日期显示方式
+        if(nowCalendar.get(Calendar.YEAR)!=note.getCalendar().get(Calendar.YEAR)){
+            date=String.valueOf(note.getCalendar().get(Calendar.YEAR))+"年"
+                    +String.valueOf(note.getCalendar().get(Calendar.MONTH)+1)+"月"
+                    +String.valueOf(note.getCalendar().get(Calendar.DATE))+"日";
+        }else{
+            if(nowCalendar.get(Calendar.DAY_OF_YEAR)==note.getCalendar().get(Calendar.YEAR)+1){
+                date="昨天";
+            }else if(nowCalendar.get(Calendar.DAY_OF_YEAR)==note.getCalendar().get(Calendar.YEAR)){
+                date="今天";
+            }else{
+                date=String.valueOf(note.getCalendar().get(Calendar.MONTH)+1)+"月"
+                        +String.valueOf(note.getCalendar().get(Calendar.DATE))+"日";
+            }
+        }
+
+        viewHolder.time.setText(time);
+        viewHolder.date.setText(date);
         if(note.getLocation()==null){
             viewHolder.location.setVisibility(View.GONE);
             viewHolder.locationImage.setVisibility(View.GONE);
