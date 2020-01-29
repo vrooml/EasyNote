@@ -1,24 +1,33 @@
 package com.fwwb.easynote.models;
 
+
+import org.litepal.crud.LitePalSupport;
+
 import java.io.Serializable;
 import java.util.Calendar;
 
-public class Note implements Serializable{
+public class Note extends LitePalSupport{
     private int id;
-    private String title;
-    private String note;
-    private Calendar calendar;
-    private String location;
+    private String title=null;
+    private String note=null;
+    private int year;
+    private int month;
+    private int day;
+    private String Time=null;
+    private String location=null;
 
 
     public Note(){
     }
 
-    public Note(int id,String title,String note,Calendar calendar,String location){
+    public Note(int id,String title,String note,int year,int month,int day,String time,String location){
         this.id=id;
         this.title=title;
         this.note=note;
-        this.calendar=calendar;
+        this.year=year;
+        this.month=month;
+        this.day=day;
+        Time=time;
         this.location=location;
     }
 
@@ -38,12 +47,36 @@ public class Note implements Serializable{
         this.note=note;
     }
 
-    public Calendar getCalendar(){
-        return calendar;
+    public int getYear(){
+        return year;
     }
 
-    public void setCalendar(Calendar calendar){
-        this.calendar=calendar;
+    public void setYear(int year){
+        this.year=year;
+    }
+
+    public int getMonth(){
+        return month;
+    }
+
+    public void setMonth(int month){
+        this.month=month;
+    }
+
+    public int getDay(){
+        return day;
+    }
+
+    public void setDay(int day){
+        this.day=day;
+    }
+
+    public String getTime(){
+        return Time;
+    }
+
+    public void setTime(String time){
+        Time=time;
     }
 
     public String getTitle(){

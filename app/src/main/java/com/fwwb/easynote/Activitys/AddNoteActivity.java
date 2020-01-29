@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.fwwb.easynote.MyApplication;
@@ -88,24 +89,28 @@ public class AddNoteActivity extends AppCompatActivity{
                     note.setLocation(address);
                 }
                 Calendar calendar = Calendar.getInstance();
-                note.setCalendar(calendar);
-
-                Intent intent = new Intent();
-                //把返回数据存入Intent
-                intent.putExtra("note",note);
-                //设置返回数据
-                setResult(RESULT_OK, intent);
+                note.setYear(calendar.get(Calendar.YEAR));
+                note.setMonth(calendar.get(Calendar.MONTH+1));
+                note.setDay(calendar.get(Calendar.DATE));
+                note.setTime(calendar.get(Calendar.HOUR_OF_DAY)+":"+calendar.get(Calendar.MINUTE));
+                boolean Issave=note.save();
+                if (Issave) {
+                    Toast.makeText(getApplicationContext(), "成功保存", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "失败啦", Toast.LENGTH_SHORT).show();
+                }
                 //关闭Activity
                 finish();
             }
         });
+
     }
 
     @Override
     protected void onActivityResult(int requestCode,int resultCode,Intent data){
         if(resultCode!=Activity.RESULT_CANCELED){
             if(requestCode==REQUEST_CODE){
-                address=data.getExtras().getString("address");//得到返回的地址
+                address=data.getStringExtra("address");//得到返回的地址
                 addLocationTextView.setText(address);
             }
         }

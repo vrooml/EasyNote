@@ -81,7 +81,7 @@ public class MapActivity extends AppCompatActivity{
             public void onClick(View v){
                 Intent intent = new Intent();
                 //把返回数据存入Intent
-                intent.putExtra("address",locationEditText.getText());
+                intent.putExtra("address",locationEditText.getText().toString().trim());
                 //设置返回数据
                 setResult(RESULT_OK, intent);
                 //关闭Activity

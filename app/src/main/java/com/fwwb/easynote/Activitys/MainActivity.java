@@ -1,8 +1,6 @@
 package com.fwwb.easynote.Activitys;
 
 import android.content.Intent;
-import android.content.res.AssetManager;
-import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -15,16 +13,14 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.fwwb.easynote.Adapters.NoteAdapter;
-import com.fwwb.easynote.MyApplication;
 import com.fwwb.easynote.R;
 import com.fwwb.easynote.models.Note;
+import org.litepal.LitePal;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
@@ -38,10 +34,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     DrawerLayout drawer;
     @BindView(R.id.navigation_view)
     NavigationView navigationView;
+    NoteAdapter noteAdapter;
 
     private List<Note> noteArray=new ArrayList<>();
-
-    private static int REQUEST_CODE=1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -52,10 +47,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
         noteRecyclerView.setLayoutManager(linearLayoutManager);
 
-        Note note=new Note(null,"测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试",Calendar.getInstance(),null);
-        noteArray.add(note);
-
-        NoteAdapter noteAdapter=new NoteAdapter(noteArray);
+        noteAdapter=new NoteAdapter(noteArray);
         noteRecyclerView.setAdapter(noteAdapter);
 
         //设置toolbar监听器
@@ -63,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View v){
                 Intent intent=new Intent(MainActivity.this,AddNoteActivity.class);
-                startActivityForResult(intent,REQUEST_CODE);
+                startActivity(intent);
             }
         });
 
@@ -77,6 +69,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //设置菜单栏按键
         navigationView.setItemIconTintList(null);
         navigationView.setNavigationItemSelectedListener(this);
+
+        //装载数据
+        noteArray.addAll(LitePal.findAll(Note.class));
+        noteAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onRestart(){
+        super.onRestart();
+        noteArray.clear();
+        noteArray.addAll(LitePal.findAll(Note.class));
+        noteAdapter.notifyDataSetChanged();
     }
 
     @Override

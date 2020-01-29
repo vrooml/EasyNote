@@ -16,7 +16,6 @@ import java.util.List;
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder>{
     private List<Note> noteList;
     Calendar nowCalendar=Calendar.getInstance();
-    String time;
     String date;
 
     static class ViewHolder extends RecyclerView.ViewHolder{
@@ -60,24 +59,20 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder>{
             viewHolder.title.setText(note.getTitle());
         }
         viewHolder.note.setText(note.getNote());
-        time=String.valueOf(note.getCalendar().get(Calendar.HOUR_OF_DAY))+":"+String.valueOf(note.getCalendar().get(Calendar.MINUTE));
         //按照距今时间设置对应日期显示方式
-        if(nowCalendar.get(Calendar.YEAR)!=note.getCalendar().get(Calendar.YEAR)){
-            date=String.valueOf(note.getCalendar().get(Calendar.YEAR))+"年"
-                    +String.valueOf(note.getCalendar().get(Calendar.MONTH)+1)+"月"
-                    +String.valueOf(note.getCalendar().get(Calendar.DATE))+"日";
+        if(nowCalendar.get(Calendar.YEAR)!=note.getYear()){
+            date=note.getYear()+"年"+note.getMonth()+"月"+note.getDay()+"日";
         }else{
-            if(nowCalendar.get(Calendar.DAY_OF_YEAR)==note.getCalendar().get(Calendar.YEAR)+1){
+            if(nowCalendar.get(Calendar.MONTH)+1==note.getMonth()&&nowCalendar.get(Calendar.DATE)-1==note.getDay()){
                 date="昨天";
-            }else if(nowCalendar.get(Calendar.DAY_OF_YEAR)==note.getCalendar().get(Calendar.YEAR)){
+            }else if(nowCalendar.get(Calendar.MONTH)+1==note.getMonth()&&nowCalendar.get(Calendar.DATE)==note.getDay()){
                 date="今天";
             }else{
-                date=String.valueOf(note.getCalendar().get(Calendar.MONTH)+1)+"月"
-                        +String.valueOf(note.getCalendar().get(Calendar.DATE))+"日";
+                date=note.getMonth()+"月"+note.getDay()+"日";
             }
         }
 
-        viewHolder.time.setText(time);
+        viewHolder.time.setText(note.getTime());
         viewHolder.date.setText(date);
         if(note.getLocation()==null){
             viewHolder.location.setVisibility(View.GONE);
