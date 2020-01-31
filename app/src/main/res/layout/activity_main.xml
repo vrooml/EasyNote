@@ -82,12 +82,13 @@
 
         </android.support.v7.widget.Toolbar>
 
-        <android.support.v7.widget.RecyclerView
+        <com.yanzhenjie.recyclerview.SwipeRecyclerView
                 android:id="@+id/recyclerview_note"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_marginTop="6dp">
 
-        </android.support.v7.widget.RecyclerView>
+        </com.yanzhenjie.recyclerview.SwipeRecyclerView>
 
     </LinearLayout>
 

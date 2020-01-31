@@ -3,7 +3,7 @@ package com.fwwb.easynote.models;
 
 import org.litepal.crud.LitePalSupport;
 
-public class Note extends LitePalSupport{
+public class DustbinNote extends LitePalSupport{
     private int id;
     private String title=null;
     private String note=null;
@@ -14,10 +14,10 @@ public class Note extends LitePalSupport{
     private String location=null;
 
 
-    public Note(){
+    public DustbinNote(){
     }
 
-    public Note(DustbinNote note){
+    public DustbinNote(Note note){
         this.title=note.getTitle();
         this.note=note.getNote();
         this.year=note.getYear();
@@ -27,7 +27,7 @@ public class Note extends LitePalSupport{
         this.location=note.getLocation();
     }
 
-    public Note(int id,String title,String note,int year,int month,int day,String time,String location){
+    public DustbinNote(int id,String title,String note,int year,int month,int day,String time,String location){
         this.id=id;
         this.title=title;
         this.note=note;

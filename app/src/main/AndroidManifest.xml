@@ -18,6 +18,10 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity android:name=".Activitys.DustbinActivity">
+        </activity>
+        <activity android:name=".Activitys.NoteDetailActivity">
+        </activity>
         <activity android:name=".Activitys.MapActivity">
         </activity>
         <activity android:name=".Activitys.AddNoteActivity">
@@ -42,9 +46,10 @@
                 android:value="vDi96L93YeuoNxjG7TR0nruKDevNnSvP">
         </meta-data>
 
-        <service android:name="com.baidu.location.f"
-                 android:enabled="true"
-                 android:process=":remote"/>
+        <service
+                android:name="com.baidu.location.f"
+                android:enabled="true"
+                android:process=":remote"/>
     </application>
 
 </manifest>

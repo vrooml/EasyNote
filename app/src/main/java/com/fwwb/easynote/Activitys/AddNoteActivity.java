@@ -29,6 +29,8 @@ public class AddNoteActivity extends AppCompatActivity{
     TextView addLocationTextView;
     @BindView(R.id.button_finish_note)
     Button finishNoteButton;
+    @BindView(R.id.add_back_button)
+    Button backButton;
 
     String address=null;
 
@@ -44,6 +46,14 @@ public class AddNoteActivity extends AppCompatActivity{
         titleEditText.setTypeface(MyApplication.boldSongTypeface);
         noteEditText.setTypeface(MyApplication.songTypeface);
         finishNoteButton.setEnabled(false);
+
+        //设置toolbar监听器
+        backButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                finish();
+            }
+        });
 
         //设置编辑栏监听
         noteEditText.addTextChangedListener(new TextWatcher(){

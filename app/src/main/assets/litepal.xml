@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <litepal>
     <dbname value="NoteDatabase"/>
-    <version value="1"/>
+    <version value="2"/>
     <list>
         <mapping class="com.fwwb.easynote.models.Note"/>
+        <mapping class="com.fwwb.easynote.models.DustbinNote"/>
     </list>
 </litepal>
