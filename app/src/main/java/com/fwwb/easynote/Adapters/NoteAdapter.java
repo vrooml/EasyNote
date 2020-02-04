@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.fwwb.easynote.R;
@@ -25,15 +26,17 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder>{
         TextView time;
         TextView location;
         ImageView locationImage;
+        CheckBox checkBox;
 
         public ViewHolder(@NonNull View itemView){
             super(itemView);
             title=(TextView)itemView.findViewById(R.id.title);
-            note=(TextView)itemView.findViewById(R.id.note);
-            date=(TextView)itemView.findViewById(R.id.date);
-            time=(TextView)itemView.findViewById(R.id.time);
-            location=(TextView)itemView.findViewById(R.id.location);
+            note=(TextView)itemView.findViewById(R.id.detail_note);
+            date=(TextView)itemView.findViewById(R.id.detail_date);
+            time=(TextView)itemView.findViewById(R.id.detail_time);
+            location=(TextView)itemView.findViewById(R.id.detail_location);
             locationImage=(ImageView)itemView.findViewById(R.id.image_location);
+            checkBox=(CheckBox)itemView.findViewById(R.id.checkbox_note);
         }
     }
 
@@ -80,6 +83,8 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder>{
         }else{
             viewHolder.location.setText(note.getLocation());
         }
+
+        viewHolder.checkBox.setVisibility(View.GONE);
     }
     @Override
     public int getItemCount(){

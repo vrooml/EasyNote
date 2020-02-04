@@ -26,6 +26,7 @@
                 android:textColor="#ffffff"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:includeFontPadding="false"
                 android:id="@+id/boldSongTextView"
                 />
 
@@ -33,6 +34,7 @@
                 android:text="   Note"
                 android:textSize="50dp"
                 android:textColor="#ffffff"
+                android:includeFontPadding="false"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/boldSongTextView2"

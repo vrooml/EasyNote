@@ -18,6 +18,7 @@ import com.fwwb.easynote.R;
 import com.fwwb.easynote.models.Note;
 import org.w3c.dom.Text;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class AddNoteActivity extends AppCompatActivity{
@@ -102,7 +103,8 @@ public class AddNoteActivity extends AppCompatActivity{
                 note.setYear(calendar.get(Calendar.YEAR));
                 note.setMonth(calendar.get(Calendar.MONTH+1));
                 note.setDay(calendar.get(Calendar.DATE));
-                note.setTime(calendar.get(Calendar.HOUR_OF_DAY)+":"+calendar.get(Calendar.MINUTE));
+                SimpleDateFormat df = new SimpleDateFormat("hh:mm");
+                note.setTime(df.format(calendar.getTime()));
                 boolean Issave=note.save();
                 if (Issave) {
                     Toast.makeText(getApplicationContext(), "成功保存", Toast.LENGTH_SHORT).show();

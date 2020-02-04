@@ -16,6 +16,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.*;
 import android.widget.Button;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,6 +38,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     Button addButton;
     @BindView(R.id.menu_button)
     Button menuButton;
+    @BindView(R.id.sort_button)
+    Button sortButton;
     @BindView(R.id.drawer)
     DrawerLayout drawer;
     @BindView(R.id.navigation_view)
@@ -65,6 +68,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 drawer.openDrawer(Gravity.START);
             }
         });
+//        sortButton.setOnClickListener(new View.OnClickListener(){
+//            @Override
+//            public void onClick(View v){
+//                showSortMenu();
+//            }
+//        });
+
+
+
 
         //设置菜单栏按键
         navigationView.setItemIconTintList(null);
@@ -74,16 +86,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         noteRecyclerView.setOnItemClickListener(new OnItemClickListener(){
             @Override
             public void onItemClick(View view,int adapterPosition){
-                startActivity(new Intent(MainActivity.this,NoteDetailActivity.class));
+                Intent intent=new Intent(MainActivity.this,NoteDetailActivity.class);
+                intent.putExtra("note",noteArray.get(adapterPosition));
+                startActivity(intent);
             }
         });
         SwipeMenuCreator swipeMenuCreator=new SwipeMenuCreator(){
             @Override
             public void onCreateMenu(SwipeMenu leftMenu,SwipeMenu rightMenu,int position){
-                Resources res = MainActivity.this.getResources();
-                Bitmap oldBmp = BitmapFactory.decodeResource(res,R.drawable.ic_delete);
-                Bitmap newBmp = Bitmap.createScaledBitmap(oldBmp,55,55, true);
-                Drawable drawable = new BitmapDrawable(res, newBmp);
+                Resources res=MainActivity.this.getResources();
+                Bitmap oldBmp=BitmapFactory.decodeResource(res,R.drawable.ic_delete);
+                Bitmap newBmp=Bitmap.createScaledBitmap(oldBmp,55,55,true);
+                Drawable drawable=new BitmapDrawable(res,newBmp);
                 SwipeMenuItem deleteItem=new SwipeMenuItem(MainActivity.this)
                         .setBackground(null)
                         .setImage(drawable)
@@ -97,8 +111,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onItemClick(SwipeMenuBridge menuBridge,int adapterPosition){
                 menuBridge.closeMenu();
-                int direction = menuBridge.getDirection(); // 左侧还是右侧菜单。0是左，右是1，暂时没有用到
-                int menuPosition = menuBridge.getPosition(); // 菜单在RecyclerView的Item中的Position。
+                int direction=menuBridge.getDirection(); // 左侧还是右侧菜单。0是左，右是1，暂时没有用到
+                int menuPosition=menuBridge.getPosition(); // 菜单在RecyclerView的Item中的Position。
                 if(menuBridge.getDirection()==SwipeRecyclerView.RIGHT_DIRECTION&&menuBridge.getPosition()==0){
                     Note note=noteArray.get(adapterPosition);
                     note.delete();
@@ -119,6 +133,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         noteArray.addAll(LitePal.findAll(Note.class));
         noteAdapter.notifyDataSetChanged();
     }
+
+//    private void showSortMenu(){
+//        final PopupMenu popupMenu=new PopupMenu(this,sortButton);
+//        getMenuInflater().inflate(R.menu.sort_menu,popupMenu.getMenu());
+//        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener(){
+//            @Override
+//            public boolean onMenuItemClick(MenuItem menuItem){
+//                switch(menuItem.getItemId()){
+//                    case R.id.one:
+//                        list
+//                        popupMenu.dismiss();
+//                        break;
+//                    case R.id.two:
+//                        Toast.makeText(PopupMenuActivity.this,"two",Toast.LENGTH_SHORT).show();
+//                        popupMenu.dismiss();
+//                        break;
+//                }
+//                return true;
+//            }
+//        });
+//        popupMenu.show();
+//    }
+
 
     @Override
     protected void onRestart(){
