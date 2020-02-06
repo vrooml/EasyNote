@@ -109,7 +109,7 @@ public class DustbinAdapter extends RecyclerView.Adapter<DustbinAdapter.ViewHold
             viewHolder.checkBox.setChecked(false);
         }
 
-        viewHolder.itemView.setOnClickListener(new View.OnClickListener(){
+        viewHolder.noteLayout.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 onItemClickListener.onItemClick(v,i);
@@ -120,7 +120,6 @@ public class DustbinAdapter extends RecyclerView.Adapter<DustbinAdapter.ViewHold
             @Override
             public void onClick(View v){
                 onItemClickListener.onItemClick(v,i);
-                Toast.makeText(MyApplication.getMyApplicationContext().getApplicationContext(),"点到了！！！！！！！！",Toast.LENGTH_SHORT).show();
             }
         });
 

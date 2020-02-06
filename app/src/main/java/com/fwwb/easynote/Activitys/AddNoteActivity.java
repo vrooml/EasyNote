@@ -16,6 +16,7 @@ import butterknife.ButterKnife;
 import com.fwwb.easynote.MyApplication;
 import com.fwwb.easynote.R;
 import com.fwwb.easynote.models.Note;
+import org.litepal.LitePal;
 import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
@@ -32,8 +33,8 @@ public class AddNoteActivity extends AppCompatActivity{
     Button finishNoteButton;
     @BindView(R.id.add_back_button)
     Button backButton;
-
-    String address=null;
+    private String address=null;
+    private Note originNote=null;
 
     private final static int REQUEST_CODE=1;
 
@@ -42,6 +43,19 @@ public class AddNoteActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_note);
         ButterKnife.bind(this);
+
+        //若为修改入口
+        if(getIntent().getSerializableExtra("note")!=null){
+            originNote=(Note)getIntent().getSerializableExtra("note");
+            if(originNote.getTitle()!=null){
+                titleEditText.setText(originNote.getTitle());
+            }
+            noteEditText.setText(originNote.getNote());
+            if(originNote.getLocation()!=null){
+                addLocationTextView.setText(originNote.getLocation());
+            }
+        }
+
 
         // 为目标控件设置TypeFace
         titleEditText.setTypeface(MyApplication.boldSongTypeface);
@@ -91,6 +105,11 @@ public class AddNoteActivity extends AppCompatActivity{
         finishNoteButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+                if(getIntent().getSerializableExtra("note")!=null){
+                    originNote=LitePal.find(Note.class,originNote.getId());
+                    int isDelete=originNote.delete();
+                    Toast.makeText(getApplicationContext(),"删除状态"+isDelete,Toast.LENGTH_SHORT).show();
+                }
                 Note note=new Note();
                 if(!titleEditText.getText().toString().equals("")){
                     note.setTitle(titleEditText.getText().toString());
@@ -99,20 +118,24 @@ public class AddNoteActivity extends AppCompatActivity{
                 if(!addLocationTextView.getText().equals("添加地点")){
                     note.setLocation(address);
                 }
-                Calendar calendar = Calendar.getInstance();
+                Calendar calendar=Calendar.getInstance();
                 note.setYear(calendar.get(Calendar.YEAR));
                 note.setMonth(calendar.get(Calendar.MONTH+1));
                 note.setDay(calendar.get(Calendar.DATE));
-                SimpleDateFormat df = new SimpleDateFormat("hh:mm");
+                SimpleDateFormat df=new SimpleDateFormat("HH:mm");
                 note.setTime(df.format(calendar.getTime()));
-                boolean Issave=note.save();
-                if (Issave) {
-                    Toast.makeText(getApplicationContext(), "成功保存", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getApplicationContext(), "失败啦", Toast.LENGTH_SHORT).show();
-                }
+
+                boolean isSave=note.save();
+//                if (isSave) {
+//                    Toast.makeText(getApplicationContext(), "成功保存", Toast.LENGTH_SHORT).show();
+//                } else {
+//                    Toast.makeText(getApplicationContext(), "失败啦", Toast.LENGTH_SHORT).show();
+//                }
                 //关闭Activity
-                finish();
+                Intent intent=new Intent(AddNoteActivity.this,MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+
             }
         });
 

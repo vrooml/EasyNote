@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/sort_menu">
+        android:id="@+id/sort_menu"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
     <group
             android:id="@+id/sort_menu_group">
 
 
         <item
                 android:id="@+id/one"
-                android:title="时间排序"
+                android:title="添加时间排序"
                 />
         <item
                 android:id="@+id/two"
-                android:title=""
+                android:title="发布时间升序"
                 />
+        <item
+            android:id="@+id/three"
+            android:title="发布时间降序"
+            />
     </group>
 
 </menu>

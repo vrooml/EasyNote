@@ -9,7 +9,7 @@
         android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
+            android:id="@+id/main_toolbar"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:background="@color/colorPrimary"
@@ -19,26 +19,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/title"
-                    android:text="回收站"
-                    android:textColor="#ffffff"
-                    android:textSize="22dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    android:layout_marginStart="8dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginTop="8dp"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:layout_marginBottom="8dp"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
-
             <Button
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:id="@+id/dust_back_button"
+                    android:id="@+id/search_back_button"
                     android:background="@drawable/back"
                     android:layout_marginBottom="8dp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -48,45 +32,34 @@
                     android:layout_marginStart="16dp"
                     app:layout_constraintStart_toStartOf="parent"/>
 
-
-
             <Button
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:id="@+id/delete_button"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    android:background="@drawable/ic_delete_white"
+                    android:id="@+id/search_button"
+                    android:background="@drawable/ic_search"
+                    android:layout_marginBottom="8dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.666"
                     android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="8dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:layout_marginTop="8dp"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    app:layout_constraintEnd_toEndOf="parent"/>
 
-            <Button
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:id="@+id/recov_button"
-                    android:background="@drawable/ic_recovery_white"
-                    android:layout_marginBottom="8dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:layout_marginTop="8dp"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/delete_button"
-                    android:layout_marginEnd="16dp"/>
-
-            <TextView
-                    android:text="全选"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/all_select_text"
-                    android:textSize="18dp"
-                    android:textColor="#ffffff"
-                    app:layout_constraintStart_toStartOf="parent"
+            <EditText
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    app:layout_constraintStart_toEndOf="@+id/search_back_button"
                     android:layout_marginStart="16dp"
+                    android:layout_marginBottom="8dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     android:layout_marginTop="8dp"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:layout_marginBottom="8dp"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
+                    app:layout_constraintEnd_toStartOf="@+id/search_button"
+                    android:layout_marginEnd="16dp"
+                    android:id="@+id/search_edittext"
+                    android:textColor="#ffffff"
+                    android:maxLines="1"
+                    android:background="@drawable/edittext_background"/>
         </android.support.constraint.ConstraintLayout>
 
     </android.support.v7.widget.Toolbar>
@@ -95,7 +68,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
         <com.yanzhenjie.recyclerview.SwipeRecyclerView
-                android:id="@+id/recyclerview_dustbin"
+                android:id="@+id/recyclerview_search"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="6dp">
@@ -104,7 +77,7 @@
 
         <ImageView
                 android:layout_gravity="center"
-                android:id="@+id/dustbin_empty_image"
+                android:id="@+id/search_empty_image"
                 android:background="@drawable/image_empty"
                 android:layout_width="150dp"
                 android:layout_height="150dp"/>

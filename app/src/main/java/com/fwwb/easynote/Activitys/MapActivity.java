@@ -3,37 +3,46 @@ package com.fwwb.easynote.Activitys;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.DataSetObserver;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
+import android.view.ViewGroup;
+import android.view.animation.TranslateAnimation;
+import android.widget.*;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.baidu.location.BDAbstractLocationListener;
-import com.baidu.location.BDLocation;
-import com.baidu.location.LocationClient;
-import com.baidu.location.LocationClientOption;
+import com.baidu.location.*;
 import com.baidu.mapapi.map.*;
 import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.search.core.PoiInfo;
 import com.baidu.mapapi.search.core.SearchResult;
 import com.baidu.mapapi.search.geocode.*;
+import com.baidu.mapapi.search.poi.*;
+import com.fwwb.easynote.Adapters.PoiListAdapter;
 import com.fwwb.easynote.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MapActivity extends AppCompatActivity{
     @BindView(R.id.view_map)
     MapView mapView;
-    @BindView(R.id.edittext_location)
-    EditText locationEditText;
+    public static EditText locationEditText;
     @BindView(R.id.button_ok_location)
     Button okLocationButtton;
+    @BindView(R.id.poi_listview)
+    ListView poiListView;
+    PoiListAdapter poiListAdapter;
+    List<String> poiInfoList=new ArrayList<>();
     BaiduMap map;
     LocationClient locationClient;
     GeoCoder coder;
+    PoiSearch poiSearch;
 
     String address=null;
 
@@ -57,6 +66,11 @@ public class MapActivity extends AppCompatActivity{
             if(!firstLocate){
                 firstLocate=true;
                 setPosition2Center(map,location,true);
+                List<Poi> poiNames=location.getPoiList();
+                for(Poi i:poiNames){
+                    poiInfoList.add(i.getName());
+                }
+                poiListAdapter.notifyDataSetChanged();
             }
         }
     }
@@ -76,6 +90,7 @@ public class MapActivity extends AppCompatActivity{
         //初始化地图
         initMap();
 
+        locationEditText=(EditText)findViewById(R.id.edittext_location);
         okLocationButtton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -88,6 +103,9 @@ public class MapActivity extends AppCompatActivity{
                 finish();
             }
         });
+        poiListAdapter=new PoiListAdapter(poiInfoList,MapActivity.this);
+        poiListView.setAdapter(poiListAdapter);
+
 
     }
 
@@ -126,7 +144,18 @@ public class MapActivity extends AppCompatActivity{
                 }else{
                     //详细地址
                     address=reverseGeoCodeResult.getAddress();
-                    locationEditText.setText(address);
+                    List<PoiInfo> poiList=reverseGeoCodeResult.getPoiList();
+                    poiInfoList.clear();
+                    for(PoiInfo i:poiList){
+                        poiInfoList.add(i.name);
+                    }
+                    poiListAdapter.notifyDataSetChanged();
+//                    poiListView.setVisibility(View.VISIBLE);
+                    if(poiList.size()!=0){
+                        locationEditText.setText(poiInfoList.get(0));
+                    }else{
+                        locationEditText.setText(address);
+                    }
                     //行政区号
                     int adCode=reverseGeoCodeResult.getCityCode();
                 }
@@ -172,7 +201,7 @@ public class MapActivity extends AppCompatActivity{
              */
             @Override
             public void onMapStatusChange(MapStatus status){
-
+                poiListView.setVisibility(View.GONE);
             }
 
             /**
@@ -187,13 +216,41 @@ public class MapActivity extends AppCompatActivity{
                         .location(status.target)
                         // POI召回半径，允许设置区间为0-1000米，超过1000米按1000米召回。默认值为1000
                         .radius(500));
+                new Handler().postDelayed(new Runnable(){
+                    public void run(){
+                        poiListView.setVisibility(View.VISIBLE);
+                    }
+                },1000);
             }
         };
         //设置地图状态监听
         map.setOnMapStatusChangeListener(mapStatusChangeListener);
 
+        //搜索点周边poi
+        poiSearch=PoiSearch.newInstance();
+        poiSearch.setOnGetPoiSearchResultListener(new OnGetPoiSearchResultListener() {
+            @Override
+            public void onGetPoiResult(PoiResult poiResult) {
+
+            }
+            @Override
+            public void onGetPoiDetailResult(PoiDetailSearchResult poiDetailSearchResult) {
+
+            }
+            @Override
+            public void onGetPoiIndoorResult(PoiIndoorResult poiIndoorResult) {
+
+            }
+            //废弃
+            @Override
+            public void onGetPoiDetailResult(PoiDetailResult poiDetailResult) {
+
+            }
+        });
+
     }
 
+    //把定位放到地图中间
     public void setPosition2Center(BaiduMap map,BDLocation bdLocation,Boolean isShowLoc){
         MyLocationData locData=new MyLocationData.Builder()
                 .accuracy(bdLocation.getRadius())
@@ -208,6 +265,8 @@ public class MapActivity extends AppCompatActivity{
             map.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
         }
     }
+
+
 
     @Override
     protected void onResume(){

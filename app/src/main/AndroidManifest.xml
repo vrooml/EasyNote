@@ -9,6 +9,8 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/> <!-- 写入扩展存储，向扩展卡写入数据，用于写入离线定位数据 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/> <!-- 访问网络，网络定位需要上网 -->
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_CALENDAR"/>
+    <uses-permission android:name="android.permission.WRITE_CALENDAR"/>
 
     <application
             android:name=".MyApplication"
@@ -18,6 +20,8 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity android:name=".Activitys.SearchActivity">
+        </activity>
         <activity android:name=".Activitys.DustbinActivity">
         </activity>
         <activity android:name=".Activitys.NoteDetailActivity">

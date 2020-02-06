@@ -1,5 +1,6 @@
 package com.fwwb.easynote.Activitys;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -30,7 +31,7 @@ public class NoteDetailActivity extends AppCompatActivity{
     Button rewriteButton;
     @BindView(R.id.detail_back_button)
     Button backButton;
-
+    private Note noteBean;
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -38,7 +39,10 @@ public class NoteDetailActivity extends AppCompatActivity{
         ButterKnife.bind(this);
 
         //设置数据
-        Note noteBean=(Note)getIntent().getSerializableExtra("note");
+        noteBean=(Note)getIntent().getSerializableExtra("note");
+        if(getIntent().getSerializableExtra("activity").equals("DustbinActivity")){
+            rewriteButton.setVisibility(View.GONE);
+        }
         if(noteBean.getTitle()==null){
             title.setVisibility(View.GONE);
         }else{
@@ -75,7 +79,9 @@ public class NoteDetailActivity extends AppCompatActivity{
         rewriteButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-//                startActivity();
+                Intent intent=new Intent(NoteDetailActivity.this,AddNoteActivity.class);
+                intent.putExtra("note",noteBean);
+                startActivity(intent);
             }
         });
     }

@@ -13,13 +13,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toolbar;
+import android.widget.*;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.fwwb.easynote.Adapters.DustbinAdapter;
 import com.fwwb.easynote.Adapters.NoteAdapter;
+import com.fwwb.easynote.MyApplication;
 import com.fwwb.easynote.R;
 import com.fwwb.easynote.models.DustbinNote;
 import com.fwwb.easynote.models.Note;
@@ -32,6 +31,8 @@ import java.util.List;
 import java.util.Map;
 
 public class DustbinActivity extends AppCompatActivity{
+    @BindView(R.id.dustbin_empty_image)
+    ImageView emptyImage;
     @BindView(R.id.recyclerview_dustbin)
     SwipeRecyclerView dustbinRecyclerView;
     static Button backButton;
@@ -94,6 +95,11 @@ public class DustbinActivity extends AppCompatActivity{
                 }
                 dustbinArray.clear();
                 dustbinArray.addAll(LitePal.findAll(DustbinNote.class));
+                if(dustbinArray.size()!=0){
+                    emptyImage.setVisibility(View.GONE);
+                }else{
+                    emptyImage.setVisibility(View.VISIBLE);
+                }
                 dustbinAdapter.notifyDataSetChanged();
                 isSelectMode=false;
                 initSelectMode(isSelectMode);
@@ -109,6 +115,11 @@ public class DustbinActivity extends AppCompatActivity{
                 }
                 dustbinArray.clear();
                 dustbinArray.addAll(LitePal.findAll(DustbinNote.class));
+                if(dustbinArray.size()!=0){
+                    emptyImage.setVisibility(View.GONE);
+                }else{
+                    emptyImage.setVisibility(View.VISIBLE);
+                }
                 dustbinAdapter.notifyDataSetChanged();
                 isSelectMode=false;
                 initSelectMode(isSelectMode);
@@ -154,6 +165,11 @@ public class DustbinActivity extends AppCompatActivity{
                     Note note=new Note(dustbinNote);
                     note.save();
                     dustbinArray.remove(adapterPosition);
+                    if(dustbinArray.size()!=0){
+                        emptyImage.setVisibility(View.GONE);
+                    }else{
+                        emptyImage.setVisibility(View.VISIBLE);
+                    }
                     dustbinAdapter.notifyDataSetChanged();
                 }
                 if(menuBridge.getDirection()==SwipeRecyclerView.RIGHT_DIRECTION&&menuBridge.getPosition()==1){
@@ -161,6 +177,11 @@ public class DustbinActivity extends AppCompatActivity{
                     DustbinNote note=dustbinArray.get(adapterPosition);
                     note.delete();
                     dustbinArray.remove(adapterPosition);
+                    if(dustbinArray.size()!=0){
+                        emptyImage.setVisibility(View.GONE);
+                    }else{
+                        emptyImage.setVisibility(View.VISIBLE);
+                    }
                     dustbinAdapter.notifyDataSetChanged();
                 }
             }
@@ -196,8 +217,9 @@ public class DustbinActivity extends AppCompatActivity{
                 else{
                     // 如果不是多选状态，则进入单选事件的业务逻辑
                     Intent intent=new Intent(DustbinActivity.this,NoteDetailActivity.class);
-//                    intent.putExtra("position",ada)
-//                    startActivity();
+                    intent.putExtra("activity","DustbinActivity");
+                    intent.putExtra("position",position);
+                    startActivity(intent);
                 }
             }
 
@@ -222,6 +244,11 @@ public class DustbinActivity extends AppCompatActivity{
         super.onRestart();
         dustbinArray.clear();
         dustbinArray.addAll(LitePal.findAll(DustbinNote.class));
+        if(dustbinArray.size()!=0){
+            emptyImage.setVisibility(View.GONE);
+        }else{
+            emptyImage.setVisibility(View.VISIBLE);
+        }
         dustbinAdapter.notifyDataSetChanged();
     }
 
@@ -230,6 +257,11 @@ public class DustbinActivity extends AppCompatActivity{
         super.onResume();
         dustbinArray.clear();
         dustbinArray.addAll(LitePal.findAll(DustbinNote.class));
+        if(dustbinArray.size()!=0){
+            emptyImage.setVisibility(View.GONE);
+        }else{
+            emptyImage.setVisibility(View.VISIBLE);
+        }
         dustbinAdapter.notifyDataSetChanged();
     }
 
