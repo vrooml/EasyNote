@@ -7,10 +7,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.fwwb.easynote.MyApplication;
@@ -32,7 +29,7 @@ public class AddNoteActivity extends AppCompatActivity{
     @BindView(R.id.button_finish_note)
     Button finishNoteButton;
     @BindView(R.id.add_back_button)
-    Button backButton;
+    ImageView backButton;
     private String address=null;
     private Note originNote=null;
 

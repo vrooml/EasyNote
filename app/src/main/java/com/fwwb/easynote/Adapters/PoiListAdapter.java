@@ -61,7 +61,7 @@ public class PoiListAdapter extends BaseAdapter{
         return convertView;
     }
 
-    class Holder {
+    class Holder{
         private TextView poiName;
         private ConstraintLayout poiLayout;
     }

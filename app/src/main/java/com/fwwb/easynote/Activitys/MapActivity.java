@@ -67,7 +67,7 @@ public class MapActivity extends AppCompatActivity{
                 firstLocate=true;
                 setPosition2Center(map,location,true);
                 List<Poi> poiNames=location.getPoiList();
-                for(Poi i:poiNames){
+                for(Poi i: poiNames){
                     poiInfoList.add(i.getName());
                 }
                 poiListAdapter.notifyDataSetChanged();
@@ -90,15 +90,15 @@ public class MapActivity extends AppCompatActivity{
         //初始化地图
         initMap();
 
-        locationEditText=(EditText)findViewById(R.id.edittext_location);
+        locationEditText=findViewById(R.id.edittext_location);
         okLocationButtton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Intent intent = new Intent();
+                Intent intent=new Intent();
                 //把返回数据存入Intent
                 intent.putExtra("address",locationEditText.getText().toString().trim());
                 //设置返回数据
-                setResult(RESULT_OK, intent);
+                setResult(RESULT_OK,intent);
                 //关闭Activity
                 finish();
             }
@@ -146,7 +146,7 @@ public class MapActivity extends AppCompatActivity{
                     address=reverseGeoCodeResult.getAddress();
                     List<PoiInfo> poiList=reverseGeoCodeResult.getPoiList();
                     poiInfoList.clear();
-                    for(PoiInfo i:poiList){
+                    for(PoiInfo i: poiList){
                         poiInfoList.add(i.name);
                     }
                     poiListAdapter.notifyDataSetChanged();
@@ -228,22 +228,25 @@ public class MapActivity extends AppCompatActivity{
 
         //搜索点周边poi
         poiSearch=PoiSearch.newInstance();
-        poiSearch.setOnGetPoiSearchResultListener(new OnGetPoiSearchResultListener() {
+        poiSearch.setOnGetPoiSearchResultListener(new OnGetPoiSearchResultListener(){
             @Override
-            public void onGetPoiResult(PoiResult poiResult) {
+            public void onGetPoiResult(PoiResult poiResult){
 
             }
+
             @Override
-            public void onGetPoiDetailResult(PoiDetailSearchResult poiDetailSearchResult) {
+            public void onGetPoiDetailResult(PoiDetailSearchResult poiDetailSearchResult){
 
             }
+
             @Override
-            public void onGetPoiIndoorResult(PoiIndoorResult poiIndoorResult) {
+            public void onGetPoiIndoorResult(PoiIndoorResult poiIndoorResult){
 
             }
+
             //废弃
             @Override
-            public void onGetPoiDetailResult(PoiDetailResult poiDetailResult) {
+            public void onGetPoiDetailResult(PoiDetailResult poiDetailResult){
 
             }
         });
@@ -265,7 +268,6 @@ public class MapActivity extends AppCompatActivity{
             map.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
         }
     }
-
 
 
     @Override

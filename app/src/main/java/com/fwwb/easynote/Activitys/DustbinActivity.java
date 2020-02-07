@@ -35,12 +35,12 @@ public class DustbinActivity extends AppCompatActivity{
     ImageView emptyImage;
     @BindView(R.id.recyclerview_dustbin)
     SwipeRecyclerView dustbinRecyclerView;
-    static Button backButton;
+    static ImageView backButton;
     DustbinAdapter dustbinAdapter;
     private List<DustbinNote> dustbinArray=new ArrayList<>();
     static TextView allSelectText;
-    static Button recoveryButton;
-    static Button deleteButton;
+    static ImageView recoveryButton;
+    static ImageView deleteButton;
     private Map<Integer,Boolean> selectItem=new HashMap<Integer,Boolean>();
     public static boolean isSelectMode=false;
 
@@ -51,10 +51,10 @@ public class DustbinActivity extends AppCompatActivity{
         setContentView(R.layout.activity_dustbin);
         ButterKnife.bind(this);
 
-        backButton=(Button)findViewById(R.id.dust_back_button);
-        recoveryButton=(Button)findViewById(R.id.recov_button);
-        deleteButton=(Button)findViewById(R.id.delete_button);
-        allSelectText=(TextView)findViewById(R.id.all_select_text);
+        backButton=findViewById(R.id.dust_back_button);
+        recoveryButton=findViewById(R.id.recov_button);
+        deleteButton=findViewById(R.id.delete_button);
+        allSelectText=findViewById(R.id.all_select_text);
         recoveryButton.setVisibility(View.GONE);
         deleteButton.setVisibility(View.GONE);
         allSelectText.setVisibility(View.GONE);
@@ -213,8 +213,7 @@ public class DustbinActivity extends AppCompatActivity{
                     addOrRemove(position);
                     dustbinAdapter.setSelectItem(selectItem);
                     dustbinAdapter.notifyDataSetChanged();
-                }
-                else{
+                }else{
                     // 如果不是多选状态，则进入单选事件的业务逻辑
                     Intent intent=new Intent(DustbinActivity.this,NoteDetailActivity.class);
                     intent.putExtra("activity","DustbinActivity");

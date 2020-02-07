@@ -28,10 +28,11 @@ public class NoteDetailActivity extends AppCompatActivity{
     @BindView(R.id.detail_image_location)
     ImageView locationImage;
     @BindView(R.id.rewrite_button)
-    Button rewriteButton;
+    ImageView rewriteButton;
     @BindView(R.id.detail_back_button)
-    Button backButton;
+    ImageView backButton;
     private Note noteBean;
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);

@@ -34,16 +34,16 @@ public class SearchActivity extends AppCompatActivity{
     @BindView(R.id.search_empty_image)
     ImageView emptyImage;
     @BindView(R.id.search_back_button)
-    Button backButton;
+    ImageView backButton;
     @BindView(R.id.search_button)
-    Button searchButton;
+    ImageView searchButton;
     @BindView(R.id.search_edittext)
     EditText searchEditText;
     @BindView(R.id.recyclerview_search)
     SwipeRecyclerView searchRecyclerView;
     NoteAdapter searchAdapter;
     private List<Note> searchArray=new ArrayList<>();
-    private static String calanderEventURL = null;
+    private static String calanderEventURL=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -145,11 +145,11 @@ public class SearchActivity extends AppCompatActivity{
         searchRecyclerView.setAdapter(searchAdapter);
     }
 
-    static {
-        if (Integer.parseInt(Build.VERSION.SDK) >= 8) {
-            calanderEventURL = "content://com.android.calendar/events";
-        } else {
-            calanderEventURL = "content://calendar/events";
+    static{
+        if(Integer.parseInt(Build.VERSION.SDK) >= 8){
+            calanderEventURL="content://com.android.calendar/events";
+        }else{
+            calanderEventURL="content://calendar/events";
         }
     }
 

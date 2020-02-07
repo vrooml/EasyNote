@@ -30,13 +30,13 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder>{
 
         public ViewHolder(@NonNull View itemView){
             super(itemView);
-            title=(TextView)itemView.findViewById(R.id.title);
-            note=(TextView)itemView.findViewById(R.id.detail_note);
-            date=(TextView)itemView.findViewById(R.id.detail_date);
-            time=(TextView)itemView.findViewById(R.id.detail_time);
-            location=(TextView)itemView.findViewById(R.id.detail_location);
-            locationImage=(ImageView)itemView.findViewById(R.id.image_location);
-            checkBox=(CheckBox)itemView.findViewById(R.id.checkbox_note);
+            title=itemView.findViewById(R.id.title);
+            note=itemView.findViewById(R.id.detail_note);
+            date=itemView.findViewById(R.id.detail_date);
+            time=itemView.findViewById(R.id.detail_time);
+            location=itemView.findViewById(R.id.detail_location);
+            locationImage=itemView.findViewById(R.id.image_location);
+            checkBox=itemView.findViewById(R.id.checkbox_note);
         }
     }
 
@@ -62,6 +62,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder>{
             viewHolder.title.setText(note.getTitle());
         }
         viewHolder.note.setText(note.getNote());
+        viewHolder.note.setMaxLines(2);
         //按照距今时间设置对应日期显示方式
         if(nowCalendar.get(Calendar.YEAR)!=note.getYear()){
             date=note.getYear()+"年"+note.getMonth()+"月"+note.getDay()+"日";
@@ -86,11 +87,11 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder>{
 
         viewHolder.checkBox.setVisibility(View.GONE);
     }
+
     @Override
     public int getItemCount(){
         return noteList.size();
     }
-
 
 
 }

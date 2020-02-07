@@ -42,17 +42,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @BindView(R.id.recyclerview_note)
     SwipeRecyclerView noteRecyclerView;
     @BindView(R.id.add_button)
-    Button addButton;
+    ImageView addButton;
     @BindView(R.id.menu_button)
-    Button menuButton;
+    ImageView menuButton;
     @BindView(R.id.sort_button)
-    Button sortButton;
+    ImageView sortButton;
     @BindView(R.id.drawer)
     DrawerLayout drawer;
     @BindView(R.id.navigation_view)
     NavigationView navigationView;
     NoteAdapter noteAdapter;
-    private static String calanderEventURL = null;
+    private static String calanderEventURL=null;
     private List<Note> noteArray=new ArrayList<>();
 
     @Override
@@ -81,8 +81,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 showSortMenu();
             }
         });
-
-
 
 
         //设置菜单栏按键
@@ -132,9 +130,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 int direction=menuBridge.getDirection(); // 左侧还是右侧菜单。0是左，右是1，暂时没有用到
                 int menuPosition=menuBridge.getPosition(); // 菜单在RecyclerView的Item中的Position。
                 if(menuBridge.getDirection()==SwipeRecyclerView.RIGHT_DIRECTION&&menuBridge.getPosition()==0){
-                    Intent intent = new Intent(Intent.ACTION_INSERT)
+                    Intent intent=new Intent(Intent.ACTION_INSERT)
                             .setData(Uri.parse(calanderEventURL))
-                            .putExtra("title", noteArray.get(adapterPosition).getTitle())
+                            .putExtra("title",noteArray.get(adapterPosition).getTitle())
                             .putExtra("description",noteArray.get(adapterPosition).getNote());
                     startActivity(intent);
                 }else if(menuBridge.getDirection()==SwipeRecyclerView.RIGHT_DIRECTION&&menuBridge.getPosition()==1){
@@ -183,16 +181,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         popupMenu.dismiss();
                         break;
                     case R.id.two:
-                        Collections.sort(noteArray, new Comparator<Note>() {
+                        Collections.sort(noteArray,new Comparator<Note>(){
                             @Override
-                            public int compare(Note o1, Note o2) {
+                            public int compare(Note o1,Note o2){
                                 if(o1.getYear()>o2.getYear()){
                                     return 1;
                                 }else if(o1.getYear()==o2.getYear()){
                                     if(o1.getMonth()>o2.getMonth()){
                                         return 1;
                                     }else if(o1.getMonth()==o2.getMonth()){
-                                        if(o1.getDay()>=o2.getDay()){
+                                        if(o1.getDay() >= o2.getDay()){
                                             return 1;
                                         }else{
                                             return -1;
@@ -209,9 +207,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         popupMenu.dismiss();
                         break;
                     case R.id.three:
-                        Collections.sort(noteArray, new Comparator<Note>() {
+                        Collections.sort(noteArray,new Comparator<Note>(){
                             @Override
-                            public int compare(Note o1, Note o2) {
+                            public int compare(Note o1,Note o2){
                                 if(o1.getYear()<o2.getYear()){
                                     return 1;
                                 }else if(o1.getYear()==o2.getYear()){
@@ -277,11 +275,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return false;
     }
 
-    static {
-        if (Integer.parseInt(Build.VERSION.SDK) >= 8) {
-            calanderEventURL = "content://com.android.calendar/events";
-        } else {
-            calanderEventURL = "content://calendar/events";
+    static{
+        if(Integer.parseInt(Build.VERSION.SDK) >= 8){
+            calanderEventURL="content://com.android.calendar/events";
+        }else{
+            calanderEventURL="content://calendar/events";
         }
     }
 
