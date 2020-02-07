@@ -98,7 +98,7 @@
                     android:id="@+id/main_empty_image"
                     android:background="@drawable/image_empty"
                     android:layout_width="150dp"
-                    android:layout_height="150dp"/>
+                    android:layout_height="170dp"/>
         </FrameLayout>
 
     </LinearLayout>
