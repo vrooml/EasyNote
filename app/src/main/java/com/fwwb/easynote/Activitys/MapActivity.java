@@ -66,9 +66,11 @@ public class MapActivity extends AppCompatActivity{
             if(!firstLocate){
                 firstLocate=true;
                 setPosition2Center(map,location,true);
-                List<Poi> poiNames=location.getPoiList();
-                for(Poi i: poiNames){
-                    poiInfoList.add(i.getName());
+                if(location.getPoiList()!=null){
+                    List<Poi> poiNames=location.getPoiList();
+                    for(Poi i: poiNames){
+                        poiInfoList.add(i.getName());
+                    }
                 }
                 poiListAdapter.notifyDataSetChanged();
             }
