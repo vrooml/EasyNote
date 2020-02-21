@@ -3,7 +3,9 @@ package com.fwwb.easynote.models;
 
 import org.litepal.crud.LitePalSupport;
 
-public class DustbinNote extends LitePalSupport{
+import java.io.Serializable;
+
+public class DustbinNote extends LitePalSupport implements Serializable{
     private int id;
     private String title=null;
     private String note=null;

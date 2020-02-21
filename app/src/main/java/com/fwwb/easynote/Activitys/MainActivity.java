@@ -26,6 +26,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.fwwb.easynote.Adapters.NoteAdapter;
 import com.fwwb.easynote.R;
+import com.fwwb.easynote.Utils.MySlideRecyclerView;
 import com.fwwb.easynote.models.DustbinNote;
 import com.fwwb.easynote.models.Note;
 import com.yanzhenjie.recyclerview.*;
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @BindView(R.id.main_toolbar)
     Toolbar toolbar;
     @BindView(R.id.recyclerview_note)
-    SwipeRecyclerView noteRecyclerView;
+    MySlideRecyclerView noteRecyclerView;
     @BindView(R.id.add_button)
     ImageView addButton;
     @BindView(R.id.menu_button)
@@ -87,74 +88,47 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setItemIconTintList(null);
         navigationView.setNavigationItemSelectedListener(this);
 
-        //swipeRecyclerview设置
-        noteRecyclerView.setOnItemClickListener(new OnItemClickListener(){
+        //mysliderecyclerview
+
+        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
+        noteRecyclerView.setLayoutManager(linearLayoutManager);
+        noteAdapter=new NoteAdapter(noteArray);
+        noteAdapter.setOnItemClickListener(new NoteAdapter.OnItemClickListener(){
             @Override
-            public void onItemClick(View view,int adapterPosition){
+            public void onItemClick(View view,int position){
                 Intent intent=new Intent(MainActivity.this,NoteDetailActivity.class);
-                intent.putExtra("note",noteArray.get(adapterPosition));
-                intent.putExtra("position",adapterPosition);
+                intent.putExtra("note",noteArray.get(position));
+                intent.putExtra("position",position);
                 intent.putExtra("activity","MainActivity");
                 startActivity(intent);
             }
-        });
-        SwipeMenuCreator swipeMenuCreator=new SwipeMenuCreator(){
-            @Override
-            public void onCreateMenu(SwipeMenu leftMenu,SwipeMenu rightMenu,int position){
-                Resources res=MainActivity.this.getResources();
-                Bitmap oldBmp=BitmapFactory.decodeResource(res,R.drawable.ic_calendar);
-                Bitmap newBmp=Bitmap.createScaledBitmap(oldBmp,55,55,true);
-                Drawable drawable=new BitmapDrawable(res,newBmp);
-                SwipeMenuItem calendarItem=new SwipeMenuItem(MainActivity.this)
-                        .setBackground(null)
-                        .setImage(drawable)
-                        .setHeight(ViewGroup.LayoutParams.MATCH_PARENT)
-                        .setWidth(150);
-                oldBmp=BitmapFactory.decodeResource(res,R.drawable.ic_delete);
-                newBmp=Bitmap.createScaledBitmap(oldBmp,55,55,true);
-                drawable=new BitmapDrawable(res,newBmp);
-                SwipeMenuItem deleteItem=new SwipeMenuItem(MainActivity.this)
-                        .setBackground(null)
-                        .setImage(drawable)
-                        .setHeight(ViewGroup.LayoutParams.MATCH_PARENT)
-                        .setWidth(150);
-                rightMenu.addMenuItem(calendarItem);
-                rightMenu.addMenuItem(deleteItem);
-            }
-        };
-        noteRecyclerView.setSwipeMenuCreator(swipeMenuCreator);
-        noteRecyclerView.setOnItemMenuClickListener(new OnItemMenuClickListener(){
-            @Override
-            public void onItemClick(SwipeMenuBridge menuBridge,int adapterPosition){
-                menuBridge.closeMenu();
-                int direction=menuBridge.getDirection(); // 左侧还是右侧菜单。0是左，右是1，暂时没有用到
-                int menuPosition=menuBridge.getPosition(); // 菜单在RecyclerView的Item中的Position。
-                if(menuBridge.getDirection()==SwipeRecyclerView.RIGHT_DIRECTION&&menuBridge.getPosition()==0){
-                    Intent intent=new Intent(Intent.ACTION_INSERT)
-                            .setData(Uri.parse(calanderEventURL))
-                            .putExtra("title",noteArray.get(adapterPosition).getTitle())
-                            .putExtra("description",noteArray.get(adapterPosition).getNote());
-                    startActivity(intent);
-                }else if(menuBridge.getDirection()==SwipeRecyclerView.RIGHT_DIRECTION&&menuBridge.getPosition()==1){
-                    Note note=noteArray.get(adapterPosition);
-                    note.delete();
-                    DustbinNote dustbinNote=new DustbinNote(note);
-                    dustbinNote.save();
-                    noteArray.remove(adapterPosition);
-                    if(noteArray.size()!=0){
-                        emptyImage.setVisibility(View.GONE);
-                    }else{
-                        emptyImage.setVisibility(View.VISIBLE);
-                    }
-                    noteAdapter.notifyDataSetChanged();
-                }
-            }
-        });
-        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
-        noteRecyclerView.setLayoutManager(linearLayoutManager);
-        noteAdapter=new NoteAdapter(noteArray);
-        noteRecyclerView.setAdapter(noteAdapter);
 
+            @Override
+            public void onMenuOneClick(View view,int position){
+                Intent intent=new Intent(Intent.ACTION_INSERT)
+                        .setData(Uri.parse(calanderEventURL))
+                        .putExtra("title",noteArray.get(position).getTitle())
+                        .putExtra("description",noteArray.get(position).getNote());
+                startActivity(intent);
+            }
+
+            @Override
+            public void onMenuSecondClick(View view,int position){
+                Note note=noteArray.get(position);
+                note.delete();
+                DustbinNote dustbinNote=new DustbinNote(note);
+                dustbinNote.save();
+                noteArray.remove(position);
+                if(noteArray.size()!=0){
+                    emptyImage.setVisibility(View.GONE);
+                }else{
+                    emptyImage.setVisibility(View.VISIBLE);
+                }
+                noteAdapter.notifyDataSetChanged();
+            }
+        });
+
+        noteRecyclerView.setAdapter(noteAdapter);
 
         //装载数据
         noteArray.addAll(LitePal.findAll(Note.class));
@@ -248,6 +222,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onRestart(){
         super.onRestart();
+        noteArray.clear();
+        noteArray.addAll(LitePal.findAll(Note.class));
+        if(noteArray.size()!=0){
+            emptyImage.setVisibility(View.GONE);
+        }else{
+            emptyImage.setVisibility(View.VISIBLE);
+        }
+        noteAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
         noteArray.clear();
         noteArray.addAll(LitePal.findAll(Note.class));
         if(noteArray.size()!=0){

@@ -27,7 +27,7 @@
                     android:id="@+id/title"
                     android:text="选择位置"
                     android:textColor="#ffffff"
-                    android:textSize="22dp"
+                    android:textSize="20dp"
                     app:layout_constraintStart_toStartOf="parent"
                     android:layout_marginStart="8dp"
                     app:layout_constraintEnd_toEndOf="parent"

@@ -20,6 +20,7 @@ import com.fwwb.easynote.Adapters.DustbinAdapter;
 import com.fwwb.easynote.Adapters.NoteAdapter;
 import com.fwwb.easynote.MyApplication;
 import com.fwwb.easynote.R;
+import com.fwwb.easynote.Utils.MySlideRecyclerView;
 import com.fwwb.easynote.models.DustbinNote;
 import com.fwwb.easynote.models.Note;
 import com.yanzhenjie.recyclerview.*;
@@ -34,7 +35,7 @@ public class DustbinActivity extends AppCompatActivity{
     @BindView(R.id.dustbin_empty_image)
     ImageView emptyImage;
     @BindView(R.id.recyclerview_dustbin)
-    SwipeRecyclerView dustbinRecyclerView;
+    MySlideRecyclerView dustbinRecyclerView;
     static ImageView backButton;
     DustbinAdapter dustbinAdapter;
     private List<DustbinNote> dustbinArray=new ArrayList<>();
@@ -58,6 +59,7 @@ public class DustbinActivity extends AppCompatActivity{
         recoveryButton.setVisibility(View.GONE);
         deleteButton.setVisibility(View.GONE);
         allSelectText.setVisibility(View.GONE);
+
 
         //设置toolbar监听器
         backButton.setOnClickListener(new View.OnClickListener(){
@@ -126,84 +128,9 @@ public class DustbinActivity extends AppCompatActivity{
             }
         });
 
-
-        //swipeRecyclerview设置
-        SwipeMenuCreator swipeMenuCreator=new SwipeMenuCreator(){
-            @Override
-            public void onCreateMenu(SwipeMenu leftMenu,SwipeMenu rightMenu,int position){
-                Resources res=DustbinActivity.this.getResources();
-                Bitmap oldBmp=BitmapFactory.decodeResource(res,R.drawable.ic_recovery);
-                Bitmap newBmp=Bitmap.createScaledBitmap(oldBmp,55,55,true);
-                Drawable drawable=new BitmapDrawable(res,newBmp);
-                SwipeMenuItem recoveryItem=new SwipeMenuItem(DustbinActivity.this)
-                        .setBackground(null)
-                        .setImage(drawable)
-                        .setHeight(ViewGroup.LayoutParams.MATCH_PARENT)
-                        .setWidth(150);
-                rightMenu.addMenuItem(recoveryItem);
-                oldBmp=BitmapFactory.decodeResource(res,R.drawable.ic_delete);
-                newBmp=Bitmap.createScaledBitmap(oldBmp,55,55,true);
-                drawable=new BitmapDrawable(res,newBmp);
-                SwipeMenuItem deleteItem=new SwipeMenuItem(DustbinActivity.this)
-                        .setBackground(null)
-                        .setImage(drawable)
-                        .setHeight(ViewGroup.LayoutParams.MATCH_PARENT)
-                        .setWidth(150);
-                rightMenu.addMenuItem(deleteItem);
-            }
-        };
-        dustbinRecyclerView.setSwipeMenuCreator(swipeMenuCreator);
-        dustbinRecyclerView.setOnItemMenuClickListener(new OnItemMenuClickListener(){
-            @Override
-            public void onItemClick(SwipeMenuBridge menuBridge,int adapterPosition){
-                menuBridge.closeMenu();
-                int direction=menuBridge.getDirection(); // 左侧还是右侧菜单。0是左，右是1，暂时没有用到
-                int menuPosition=menuBridge.getPosition(); // 菜单在RecyclerView的Item中的Position。
-                if(menuBridge.getDirection()==SwipeRecyclerView.RIGHT_DIRECTION&&menuBridge.getPosition()==0){
-                    DustbinNote dustbinNote=dustbinArray.get(adapterPosition);
-                    dustbinNote.delete();
-                    Note note=new Note(dustbinNote);
-                    note.save();
-                    dustbinArray.remove(adapterPosition);
-                    if(dustbinArray.size()!=0){
-                        emptyImage.setVisibility(View.GONE);
-                    }else{
-                        emptyImage.setVisibility(View.VISIBLE);
-                    }
-                    dustbinAdapter.notifyDataSetChanged();
-                }
-                if(menuBridge.getDirection()==SwipeRecyclerView.RIGHT_DIRECTION&&menuBridge.getPosition()==1){
-                    //TODO 弹窗
-                    DustbinNote note=dustbinArray.get(adapterPosition);
-                    note.delete();
-                    dustbinArray.remove(adapterPosition);
-                    if(dustbinArray.size()!=0){
-                        emptyImage.setVisibility(View.GONE);
-                    }else{
-                        emptyImage.setVisibility(View.VISIBLE);
-                    }
-                    dustbinAdapter.notifyDataSetChanged();
-                }
-            }
-        });
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
         dustbinRecyclerView.setLayoutManager(linearLayoutManager);
         dustbinAdapter=new DustbinAdapter(dustbinArray);
-        dustbinRecyclerView.setOnItemLongClickListener(new OnItemLongClickListener(){
-            @Override
-            public void onItemLongClick(View view,int adapterPosition){
-                if(!isSelectMode){
-                    isSelectMode=true;
-                    selectItem.clear();
-                    dustbinAdapter.notifyDataSetChanged();
-                    initSelectMode(isSelectMode);
-                }
-            }
-        });
-        dustbinRecyclerView.setAdapter(dustbinAdapter);
-
-
-        //recyclerview点击设置
         dustbinAdapter.setOnItemClickListener(new DustbinAdapter.OnItemClickListener(){
             @Override
             public void onItemClick(View view,int position){
@@ -218,6 +145,7 @@ public class DustbinActivity extends AppCompatActivity{
                     Intent intent=new Intent(DustbinActivity.this,NoteDetailActivity.class);
                     intent.putExtra("activity","DustbinActivity");
                     intent.putExtra("position",position);
+                    intent.putExtra("note",new Note(dustbinArray.get(position)));
                     startActivity(intent);
                 }
             }
@@ -231,8 +159,38 @@ public class DustbinActivity extends AppCompatActivity{
                     initSelectMode(isSelectMode);
                 }
             }
+
+            @Override
+            public void onMenuOneClick(View view,int position){
+                DustbinNote dustbinNote=dustbinArray.get(position);
+                dustbinNote.delete();
+                Note note=new Note(dustbinNote);
+                note.save();
+                dustbinArray.remove(position);
+                if(dustbinArray.size()!=0){
+                    emptyImage.setVisibility(View.GONE);
+                }else{
+                    emptyImage.setVisibility(View.VISIBLE);
+                }
+                dustbinAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onMenuSecondClick(View view,int position){
+                //TODO 弹窗
+                DustbinNote note=dustbinArray.get(position);
+                note.delete();
+                dustbinArray.remove(position);
+                if(dustbinArray.size()!=0){
+                    emptyImage.setVisibility(View.GONE);
+                }else{
+                    emptyImage.setVisibility(View.VISIBLE);
+                }
+                dustbinAdapter.notifyDataSetChanged();
+            }
         });
 
+        dustbinRecyclerView.setAdapter(dustbinAdapter);
         //装载数据
         dustbinArray.addAll(LitePal.findAll(DustbinNote.class));
         dustbinAdapter.notifyDataSetChanged();
